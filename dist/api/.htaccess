@@ -1,0 +1,20 @@
+# Protect the credentials file only. PHP must stay enabled here — this folder
+# IS the API.
+#
+# The config is a dotfile (.config.php) and this rule blocks it a second way,
+# so a misconfigured server would still have to fail twice to leak the password.
+
+<IfModule mod_authz_core.c>
+  <FilesMatch "^\.(config|env)|^(config|db)\.php$">
+    Require all denied
+  </FilesMatch>
+</IfModule>
+
+<IfModule !mod_authz_core.c>
+  <FilesMatch "^\.(config|env)|^(config|db)\.php$">
+    Order allow,deny
+    Deny from all
+  </FilesMatch>
+</IfModule>
+
+Options -Indexes
